@@ -1,0 +1,93 @@
+{"frames": {
+
+"DayPlanner40x40.png":
+{
+	"frame": {"x":0,"y":0,"w":40,"h":40},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":40,"h":40},
+	"sourceSize": {"w":40,"h":40},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"Dirt10x10.png":
+{
+	"frame": {"x":40,"y":0,"w":10,"h":10},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":10,"h":10},
+	"sourceSize": {"w":10,"h":10},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"Grass10x10.png":
+{
+	"frame": {"x":50,"y":0,"w":10,"h":10},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":10,"h":10},
+	"sourceSize": {"w":10,"h":10},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"GrassPlant20x20.png":
+{
+	"frame": {"x":0,"y":40,"w":20,"h":20},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":20,"h":20},
+	"sourceSize": {"w":20,"h":20},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"IronSword30x30.png":
+{
+	"frame": {"x":20,"y":40,"w":30,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":30,"h":30},
+	"sourceSize": {"w":30,"h":30},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"Player30x60.png":
+{
+	"frame": {"x":0,"y":70,"w":30,"h":60},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":30,"h":60},
+	"sourceSize": {"w":30,"h":60},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"StarterSlime30x20.png":
+{
+	"frame": {"x":30,"y":70,"w":30,"h":20},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":30,"h":20},
+	"sourceSize": {"w":30,"h":20},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"stone10x10.png":
+{
+	"frame": {"x":0,"y":130,"w":10,"h":10},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":10,"h":10},
+	"sourceSize": {"w":10,"h":10},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"tree50x100.png":
+{
+	"frame": {"x":10,"y":130,"w":50,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":100},
+	"sourceSize": {"w":50,"h":100},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "GLTextures.png",
+	"format": "RGBA8888",
+	"size": {"w":60,"h":230},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:4fcd48f968b16e12b9bf1ebf5fa7997d:7f80f241c7ffd04e85674a5e11476aa1:27e81a786dee6b07595fa4f63d207449$"
+}
+}

@@ -1,19 +1,91 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <title>The App Engine Blog</title>
-  </head>
-  <body>
-    <h1>Welcome to the App Engine Blog</h1>
-    <p>This is being served by App Engine!</p>
-    <img src="images/TitleGL.png">
-    <script src="/js/main.js"></script>
-    <p>Call api scaffolding stub</p>
-    <a href="api/world/addTwoNumbers;firstNumber=2;secondNumber=3">Click here and you should see '5'.</a>
-  <div>
-	<canvas id="world" width="1000" height="1000"></canvas>
-  </div>
-  <script src="/js/main.js"></script>
-  </body>
-</html>
+<head>
+  <meta charset="utf-8">
+  <title>Hello World</title>
+  <script src="pixi.min.js"></script>
+  <style>* {padding: 0; margin: 0}</style>
+</head>
+<body>
+  <script type="text/javascript">
+    let type = "WebGL"
+    if(!PIXI.utils.isWebGLSupported()){
+      type = "canvas"
+    }
 
+//Aliases
+let Application = PIXI.Application,
+    loader = PIXI.loader,
+    resources = PIXI.loader.resources,
+    Sprite = PIXI.Sprite;
+
+//Create a Pixi Application
+let app = new Application({ 
+
+    width: 256, 
+    height: 256,                       
+    antialias: true, 
+    transparent: false, 
+    resolution: 1
+  }
+);
+
+app.renderer.backgroundColor = 0x8eb2ff;
+app.renderer.view.style.position = "absolute";
+app.renderer.view.style.display = "block";
+app.renderer.autoResize = true;
+app.renderer.resize(window.innerWidth, window.innerHeight);
+
+//Add the canvas that Pixi automatically created for you to the HTML document
+document.body.appendChild(app.view);
+
+//load an image and run the `setup` function when it's done
+loader
+  .add("images/GLTextures.json")
+  .load(setup);
+
+let cat, id;
+
+
+//This `setup` function will run when the image has loaded
+function setup() {
+    id = loader.resources["images/GLTextures.json"].textures; 
+  //Create the cat sprite
+  cat = new Sprite(id["DayPlanner40x40.png"]);
+  cat.y = 50;
+  cat.vx = 0;
+  cat.vy = 0;
+  cat.pivot.set(23,16);
+
+
+  //Add the cat to the stage
+  app.stage.addChild(cat);
+
+app.ticker.add(delta => gameLoop(delta));
+}
+
+state = play;
+ 
+//Start the game loop 
+app.ticker.add(delta => gameLoop(delta));
+
+function gameLoop(delta){
+
+  //Update the current game state:
+  state(delta);
+}
+
+function play(delta) {
+    
+  cat.vx = 1;
+
+
+  //Move the cat 1 pixel 
+  cat.x += cat.vx;
+  cat.y += cat.vy;
+  cat.rotation += 0.1;
+}
+
+</script>
+</body>
+</html>
