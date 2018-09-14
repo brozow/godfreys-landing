@@ -18,6 +18,9 @@ let Application = PIXI.Application,
     loader = PIXI.loader,
     resources = PIXI.loader.resources,
     Sprite = PIXI.Sprite;
+	
+	
+
 
 //Create a Pixi Application
 let app = new Application({ 
@@ -40,28 +43,110 @@ app.renderer.resize(window.innerWidth, window.innerHeight);
 document.body.appendChild(app.view);
 
 //load an image and run the `setup` function when it's done
+	  
+function loadJSON(url,callback) {   
+
+    var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+    xobj.open('GET', url, true); // Replace 'my_data' with the path to your file
+    xobj.onreadystatechange = function () {
+          if (xobj.readyState == 4 && xobj.status == "200") {
+            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+            callback(xobj.responseText);
+          }
+    };
+    xobj.send(null);  
+ }
+
+loadJSON("js/world/chunk_0.json",function(response) {
+  // Parse JSON string into object
+    var chunk_0 = JSON.parse(response);
+	console.log(chunk_0);
+ });
+	 
+
+
+	  
 loader
   .add("images/GLTextures.json")
+  //.add("js/world/chunk_0.json")
   .load(setup);
+      
+function setup() {
+	loadJSON("js/world/chunk_0.json",function(response) {
+  // Parse JSON string into object
+    var chunk_0 = JSON.parse(response);
+	init(chunk_0);
+ });
+}
 
 let cat, id;
+let ready = false;
 
-
+// new PIXI.Sprite(loader.resources["images/GLTextures.json"].textures["Grass10x10.png"]);
 //This `setup` function will run when the image has loaded
-function setup() {
-    id = loader.resources["images/GLTextures.json"].textures; 
+function init(chunk) {
+	id = loader.resources["images/GLTextures.json"].textures;
+ // chunk_0 = loader.resources["/js/world/chunk_0.json"];
+ // console.log(chunk_0);
   //Create the cat sprite
   cat = new Sprite(id["DayPlanner40x40.png"]);
-  cat.y = 50;
+  cat.y = 500;
   cat.vx = 0;
-  cat.vy = 0;
+  cat.vy = -1;
   cat.pivot.set(23,16);
+	
+  function getSpriteId(block) {
+	  switch (block){
+		  case 1:
+		     return id["Grass10x10.png"];
+		  case 2:
+		     return id["Dirt10x10.png"];
+		   case 3:
+		     return id["stone10x10.png"];
+		  default:
+		     return undefined;
+      }
+		  
+  }
+  function toPixels(units) {
+	 return units * 10
+  }
+  function drawBlock(block,xu,yu) {
+	 var spriteId = getSpriteId(block);
+     if (spriteId) {
+		blockImage = new Sprite(spriteId);
+	 	blockImage.x = toPixels(xu);
+     	blockImage.y = toPixels(yu);
+		console.log("working");
+		app.stage.addChild(blockImage);
+	 }
+  }
+	
+  function drawChunk(chunk) {
+	  var xu = 0
+	  var yu = 0
+	  var widthu = 128
+	  for(var i = 0; i < chunk.length; i++){
+	  	  drawBlock(chunk[i],xu,yu);
+		  xu++;
+		  if(xu == widthu) {
+			  xu = 0;
+			  yu++;
+		  }
+	  }
+  }
 
+  drawChunk(chunk);
+	
 
   //Add the cat to the stage
   app.stage.addChild(cat);
 
 app.ticker.add(delta => gameLoop(delta));
+
+console.log("Setup Complete!")
+ready = true;
 }
 
 state = play;
@@ -76,14 +161,18 @@ function gameLoop(delta){
 }
 
 function play(delta) {
-    
-  cat.vx = 1;
-
+  if (!ready) return; 
+   
+  cat.vx = 5;
+//  cat.vy += 0.1;
 
   //Move the cat 1 pixel 
   cat.x += cat.vx;
-  cat.y += cat.vy;
+  //cat.y += cat.vy;
   cat.rotation += 0.1;
+    
+
+    
 }
 
 </script>
