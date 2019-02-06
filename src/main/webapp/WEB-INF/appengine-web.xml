@@ -16,5 +16,7 @@
         </include>
         <include path="/js/**.js" >
         </include>
+        <include path="/js/**.json" >
+        </include>
     </static-files>
 </appengine-web-app>
