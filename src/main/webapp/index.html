@@ -25,8 +25,8 @@ let Application = PIXI.Application,
 //Create a Pixi Application
 let app = new Application({ 
 
-    width: 256, 
-    height: 256,                       
+    width: 2000, 
+    height: 1000,                       
     antialias: true, 
     transparent: false, 
     resolution: 1
@@ -34,11 +34,9 @@ let app = new Application({
 );
 
 
-app.renderer.backgroundColor = 0x8eb2ff;
+app.renderer.backgroundColor = 0xb3ffff;
 app.renderer.view.style.position = "absolute";
 app.renderer.view.style.display = "block";
-app.renderer.autoResize = true;
-app.renderer.resize(window.innerWidth, window.innerHeight);
 
 //Add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
@@ -123,7 +121,23 @@ function keyboard(value) {
   
   return key;
 }
-let space = keyboard(" ");	  
+let grass = keyboard("1");
+let dirt = keyboard("2");
+let stone = keyboard("3");
+let wood = keyboard("4");
+var choice = 1;
+grass.press = () => {
+  choice = 1
+};
+dirt.press = () => {
+  choice = 2
+};
+stone.press = () => {
+  choice = 3
+};
+wood.press = () => {
+  choice = 4
+};
 var chunk_0;
 function setup() {
 	loadJSON("js/world/chunk_0.json",function(response) {
@@ -138,74 +152,6 @@ let ready = false;
 
 // new PIXI.Sprite(loader.resources["images/GLTextures.json"].textures["Grass10x10.png"]);
 //This `setup` function will run when the image has loaded
-function redrawChunk(chunk) {
-	id = loader.resources["images/GLTextures.json"].textures;
- // chunk_0 = loader.resources["/js/world/chunk_0.json"];
- // console.log(chunk_0);
-  //Create the cat sprite
-  function getSpriteId(block) {
-	  switch (block){
-		  case 1:
-		     return id["Grass10x10.png"];
-		  case 2:
-		     return id["Dirt10x10.png"];
-		  case 3:
-		     return id["stone10x10.png"];
-		  case 4:
-			 return id["wood10x10.png"];
-		  default:
-		     return undefined;
-      }
-		  
-  }
-  function toPixels(units) {
-	 return units * 10
-  }
-  function toUnits(pixels) {
-	 return (pixels - (pixels % 10)) / 10
-  }
-  function drawBlock(block,xu,yu) {
-	 var spriteId = getSpriteId(block);
-     if (spriteId) {
-		blockImage = new Sprite(spriteId);
-	 	blockImage.x = toPixels(xu);
-     	blockImage.y = toPixels(yu);
-      blockImage.interactive = true;
-      blockImage.on('tap', (event) => {
-        placeBlock(4, (toUnits(x)* toUnits(y)), chunk);
-      });
-		console.log("working");
-		app.stage.addChild(blockImage);
-	 }else {
-		blockImage = new Sprite(Sprite.from('images/empty10x10.png'));
-	 	blockImage.x = toPixels(xu);
-     	blockImage.y = toPixels(yu);
-      blockImage.interactive = true;
-      blockImage.on('tap', (event) => {
-        placeBlock(4, (toUnits(x)* toUnits(y)), chunk);
-      });
-		console.log("working");
-		app.stage.addChild(blockImage);
-	 }
-  }
-  function drawChunk(chunk) {
-	  var xu = 0
-	  var yu = 0
-	  var widthu = 128
-	  for(var i = 0; i < chunk.length; i++){
-	  	  drawBlock(chunk[i],xu,yu);
-		  xu++;
-		  if(xu == widthu) {
-			  xu = 0;
-			  yu++;
-		  }
-	  }
-  }
-  
-  drawChunk(chunk);
-
-  //Add the cat to the stage
-};
 function init(chunk) {
   id = loader.resources["images/GLTextures.json"].textures;
  // chunk_0 = loader.resources["/js/world/chunk_0.json"];
@@ -238,28 +184,34 @@ function init(chunk) {
   function toUnits(pixels) {
 	 return (pixels - (pixels % 10)) / 10
   }
-  function drawBlock(chunk,block,xu,yu) {
+  
+   
+  function drawBlock(chunk,index,block,xu,yu) {
 	 var spriteId = getSpriteId(block);
      if (spriteId) {
-		blockImage = new Sprite(spriteId);
+		var blockImage = Sprite.from(spriteId);
 	 	blockImage.x = toPixels(xu);
      	blockImage.y = toPixels(yu);
       blockImage.interactive = true;
       blockImage.cursor = 'crosshair';
-      blockImage.on('tap', (event) => {
-        placeBlock(4, (toUnits(x)* toUnits(y)), chunk);
+      blockImage.on('click', (event) => {
+        console.log(event);
+        placeBlock(choice, index, chunk,blockImage);
       });
    //handle event
 		console.log("working");
 		app.stage.addChild(blockImage);
 	 }else {
-		blockImage = Sprite.from('images/empty10x10.png');
+      var texture01 = PIXI.Texture.from("images/empty10x10.png");
+		var blockImage = Sprite.from(texture01);
 	 	blockImage.x = toPixels(xu);
      	blockImage.y = toPixels(yu);
       blockImage.interactive = true;
       blockImage.cursor = 'all-scroll';
-      blockImage.on('tap', (event) => {
-      placeBlock(4, (toUnits(x)* toUnits(y)), chunk);
+      blockImage.identifier = index;
+      blockImage.on('click', (event) => {
+        console.log(event);
+        placeBlock(choice, index, chunk,blockImage);
       });
 		console.log("working");
 		app.stage.addChild(blockImage);
@@ -270,7 +222,7 @@ function init(chunk) {
 	  var yu = 0
 	  var widthu = 128
 	  for(var i = 0; i < chunk.length; i++){
-	  	  drawBlock(chunk,chunk[i],xu,yu);
+	  	  drawBlock(chunk,i,chunk[i],xu,yu);
 		  xu++;
 		  if(xu == widthu) {
 			  xu = 0;
@@ -278,9 +230,11 @@ function init(chunk) {
 		  }
 	  }
   }
-  function placeBlock(block, cords, chunk){
-	  chunk[cords] = block; 
-	  redrawChunk(chunk);
+  function placeBlock(block, cords, chunk, sprite){
+	 chunk[cords] = block; 
+    var texture = PIXI.Texture.from(getSpriteId(block));
+	 sprite.texture = texture;
+    console.log("working");
   }
   
   drawChunk(chunk);
@@ -293,10 +247,6 @@ app.ticker.add(delta => gameLoop(delta));
 console.log("Setup Complete!")
 ready = true;
 };
-function placeBlock(block, cords, chunk){
-  chunk[cords] = block; 
-  redrawChunk(chunk);
-  }
 state = play;
  
 //Start the game loop 
